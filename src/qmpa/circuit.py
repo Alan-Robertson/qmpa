@@ -363,6 +363,9 @@ class Circuit():
                 self.add(cpy_target_reg[:reg_r.size - targ_index - 1], reg_r[targ_index:], reg_carry=reg_carry)
                 self.cpy(reg_a[targ_index], cpy_target_reg[0])
 
+            # Parity, might remove this CNOT
+            self.cnot(reg_r[-1 - i], reg_q[-1 - i])
+
             self.subtract(reg_b, reg_r[reg_a.size - reg_b.size - i: reg_r.size - i], reg_carry=reg_carry)
             self.cnot(reg_r[-1 - i], reg_q[-1 - i])
 
