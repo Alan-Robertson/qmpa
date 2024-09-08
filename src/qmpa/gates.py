@@ -81,7 +81,7 @@ class Toffoli(Gate):
             # Different constructions of this gate will vary with these counts
             cnot_count = 6,
             toffoli_count = 1,
-            non_clifford_count = 7,
+            non_clifford_count = 6,
             ident_rep = 2
         )
         self.ctrl_a = self.qargs[0]
