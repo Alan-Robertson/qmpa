@@ -117,7 +117,7 @@ class Alloc(Gate):
         return vec
     
     def representation(self):
-        return ([f"\lstick[wires={len(self)}]{{$\ket{{{self.initial_value}}}_{{\\text{{{self.name}}}}}$}} \setwiretype{{q}}"] 
+        return ([f"\\lstick[wires={len(self)}]{{$\\ket{{{self.initial_value}}}_{{\\text{{{self.name}}}}}$}} \\setwiretype{{q}}"] 
                 + ([" "] * (len(self) - 1)))
         
 class Free(Gate):
@@ -133,5 +133,5 @@ class Free(Gate):
             vec[i] = 0    
         return vec
     def representation(self):
-            return [f"\\trash{{\ket{{{self.final_value}}}}}\setwiretype{{n}}"] * len(self)
+            return [f"\\trash{{\\ket{{{self.final_value}}}}}\\setwiretype{{n}}"] * len(self)
         

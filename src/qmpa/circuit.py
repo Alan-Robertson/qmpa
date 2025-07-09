@@ -5,6 +5,7 @@ import numpy as np
 from qmpa.virtual_chunk import Virtual_QChunk
 from qmpa.allocator import QAllocator
 from qmpa.gates import Gate, X, CNOT, Toffoli, Space, Alloc, Free
+from qmpa.utils import hamming_weight
 
 def vwrap(fn):
     def inner(*args, **kwargs):
@@ -34,6 +35,7 @@ class Circuit():
         
         for gate in self.circuit:
             vec = gate(vec)
+            print(vec)
             
         if len(regs) > 0:
             return [vec[reg()] for reg in regs]
@@ -262,7 +264,57 @@ class Circuit():
         self.anc_free(reg_carry)
 
         return 
-    
+   
+    def add_cuccaro(self, *args, **kwargs):
+        return self.add(*args, **kwargs)
+
+    def add_draper(self,
+            reg_a,
+            reg_b,
+            target_reg=None,
+            reg_carry=None,
+            carry=True,
+            name='Adder Output'):
+        '''
+            Draper Adder
+            https://arxiv.org/pdf/quant-ph/0406142
+        '''
+        assert(len(reg_a) == len(reg_b))
+        w_n = hamming_weight(len(reg_a))
+
+        target_reg = self.anc_register(
+                    reg_a.size + reg_b.size + 1, 
+                    reg=target_reg,
+                    name=name, 
+                )
+        anc_reg = self.anc_register(
+                    1, 
+                    reg=reg_carry,
+                    name='carry'
+                )
+
+        # Initial Round
+        for i in range(len(reg_a)):
+            self.toffoli(reg_a[i], reg_b[i], target_reg[i])
+
+        for  i in range(1, len(reg_a)):
+            self.cnot(reg_a[i], reg_b[i])
+
+        # P Round
+        # G Round
+        # C Round
+        # P-1 Round 
+
+        # Final Round
+        for  i in range(1, len(reg_a)):
+            self.cnot(reg_a[i], reg_b[i])
+
+        for i in range(len(reg_a)):
+            self.toffoli(reg_a[i], reg_b[i], target_reg[i])
+
+        self.anc_free(anc_reg)
+        return target_reg
+ 
     def subtract(self, 
                 reg_a, 
                 reg_b, 
