@@ -22,7 +22,7 @@ def test_initial_value(n_qubits=4):
        qmpa_circuit = adapters_cirq.from_cirq(cirq_circuit, n_qubits=(2 * n_qubits + 1), initial_value=joint_value)
        assert (c() == qmpa_circuit()).all()
 
-def test_addition(n_qubits=e):
+def test_addition(n_qubits=4):
     for _ in range(n_tests):
         x, y = np.random.randint(2 ** n_qubits, size=(2))
 
