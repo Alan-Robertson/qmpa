@@ -59,7 +59,7 @@ def to_cirq(circ: qmpa.circuit.Circuit) -> cirq.Circuit:
 
     n_qubits = circ.allocator.max_mem 
     cirq_circuit = cirq.Circuit()
-    register = [cirq.LineQubit(i) for i in range(n_qubits)]
+    register = [cirq.NamedQubit(str(i)) for i in range(n_qubits)]
 
     for gate in circ.circuit:
         cirq_gate_constructor = to_cirq_adapter.get(type(gate), None)
